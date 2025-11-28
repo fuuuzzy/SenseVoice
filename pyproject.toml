@@ -1,0 +1,123 @@
+[project]
+name = "sensevoice"
+version = "0.1.0"
+description = "SenseVoice: Multilingual Speech Understanding Model with ASR, LID, SER, and AED capabilities"
+readme = "README.md"
+requires-python = ">=3.8,<3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "FunAudioLLM Team" }
+]
+keywords = ["speech recognition", "ASR", "emotion recognition", "event detection", "multilingual"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "torch>=2.0,<=2.3",
+    "torchaudio>=2.0",
+    "funasr>=1.1.3",
+    "numpy>=1.24,<=1.26.4",
+    "modelscope>=1.10",
+    "huggingface-hub>=0.19",
+]
+
+[project.optional-dependencies]
+# Web UI dependencies
+webui = [
+    "gradio>=4.0",
+    "librosa>=0.10",
+]
+
+# API server dependencies
+api = [
+    "fastapi>=0.111.1",
+    "uvicorn[standard]>=0.27",
+]
+
+# Development dependencies
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "ruff>=0.1",
+    "mypy>=1.0",
+]
+
+# Training dependencies
+train = [
+    "deepspeed>=0.12",
+]
+
+# All dependencies
+all = [
+    "sensevoice[webui,api,dev,train]",
+]
+
+[project.scripts]
+sensevoice-api = "api:app"
+sensevoice-webui = "webui:launch"
+
+[project.urls]
+Homepage = "https://github.com/FunAudioLLM/SenseVoice"
+Repository = "https://github.com/FunAudioLLM/SenseVoice"
+Documentation = "https://github.com/FunAudioLLM/SenseVoice/blob/main/README.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+exclude = [
+    "/.git",
+    "/.github",
+    "/outputs*",
+    "/modelscope_models",
+    "/export",
+    "/test_local",
+    "*.pyc",
+    "__pycache__",
+]
+
+[tool.hatch.build.targets.wheel.force-include]
+"model.py" = "model.py"
+"api.py" = "api.py"
+"webui.py" = "webui.py"
+"export.py" = "export.py"
+"export_meta.py" = "export_meta.py"
+"demo1.py" = "demo1.py"
+"demo2.py" = "demo2.py"
+"demo_onnx.py" = "demo_onnx.py"
+"demo_libtorch.py" = "demo_libtorch.py"
+"utils" = "utils"
+"data" = "data"
+"deepspeed_conf" = "deepspeed_conf"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
