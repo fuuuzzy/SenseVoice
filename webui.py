@@ -218,7 +218,14 @@ html_content = """
 
 
 def launch():
-	with gr.Blocks(theme=gr.themes.Soft()) as demo:
+	try:
+		# Gradio 4.x+
+		demo = gr.Blocks(theme=gr.themes.Soft())
+	except:
+		# Gradio 3.x or other versions
+		demo = gr.Blocks()
+	
+	with demo:
 		# gr.Markdown(description)
 		gr.HTML(html_content)
 		with gr.Row():
